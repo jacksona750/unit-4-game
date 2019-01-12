@@ -43,15 +43,18 @@
 
             <div class="col-2">
                 <div id="score-box">
-                    <div id = "wins">Wins: 0</div>
-                    <div id = "losses">Losses: 0</div>
+                    <p>Wins: 0</p>
+                    <p>Losses: 0</p>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class= "col-5">
-                <div id="crystals"></div>            
+            <div id="crystal">
+            <img id="crystal-1" class="btn crystal" src=assets/images/gem_1.jpg>
+            <img id="crystal-2" class="btn crystal" src=assets/images/gem_2.jpg>
+            <img id="crystal-3" class="btn crystal" src=assets/images/gem_3.jpg>
+            <img id="crystal-4" class="btn crystal" src=assets/images/gem_4.jpg>
             </div>
         </div>
 
@@ -69,77 +72,50 @@
 
     
     <script type="text/javascript">
-
-
-    // Define variable for page load
-    var counter = 0;
-    var wins = "";
-    var losses = "";
-    var targetNumber = "";
-
-    var crystalImage = ["assets/images/gem_1.jpg", "assets/images/gem_2.jpg", "assets/images/gem_3.jpg" , "assets/images/gem_4.jpg"];    
-
-        
-    // Create function to start game
-    var startGame = function () {     
-
-    $("#crystals").empty();
-    
-    // Set counter to zero
-    $('#total-score').text(counter);
-
+    $(document).ready(function() {
+     
     // Create target number between 19-120 and display in target number text box
-    targetNumber = Math.floor(Math.random() * 101) + 19;    
+    var targetNumber = getRandomIntInclusive(19, 120);
     
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+          }
+
     $("#target-number").text(targetNumber);
 
+    // Set counter to 0 for start of game
+    var counter = 0;
+   
     // Assign each crystal image a different random value between 1-12
     for (var i = 0; i < 4; i++) {
-        var randomNumber = Math.floor(Math.random() * 11) + 1;
-        console.log(randomNumber);
-    
-        
-    // Define variable to store random number in
-        var crystal = $("<img>");    
-        crystal.attr({
-            'class': 'crystal',
-            'crystal-value': randomNumber,
-            'src': crystalImage[i],
-        });
-        $("#crystals").append(crystal);
-
+        var randomNumber = getRandomIntInclusive(1, 12);
     }
-}
-    
-    startGame ();
+    console.log(randomNumber);
+
+     // Define variable to store random number in
+     var crystal = $("<div>");    
+        crystal.attr({
+            'crystal-value': randomNumber,
+        });
+        $("#crystals").append(crystal);    
 
     // When crystal image is clicked, increase total score by crystal value
-    $(document).on("click", ".crystal", function() {
-       
-        var crystalValue = parseInt($(this).attr('crystal-value'));
-        counter += crystalValue;
-        
+    $(".crystal").on("click", function() {
+        var crystalValue = $(this).attr('crystal-value');
+        crystalValue = parseInt(crystalValue);
+
+
+        counter += crystalNumber[crystalValue];
+        console.log(counter);
     // Dispaly current score in total-score box
-     $('#total-score').text(counter);
-  
+        $('#total-score').text(counter);
     // If total score = target number, print win in score box, increase wins by 1 and reset game
-    if (counter === targetNumber) {
-        wins++;
-        $('#wins').text("Wins: " + wins);
-        counter = 0;
-        startGame();
-    }
 
-    // If total score > target number, print lose in score box, increase losses by 1 and reset game
-        else if (counter > targetNumber) {
-            losses++;
-            $('#losses').text("Losses: " + losses);
-            counter = 0;
-            startGame();
-        }
-
+    // If total score >= target number, print lose in score box, increase losses by 1 and reset game
+    })
 });    
-
     </script>
     </div>
 </body>
